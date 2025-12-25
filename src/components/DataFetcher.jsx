@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import axios from 'axios';
 
 const DataFetcher = ({ userId = 1 }) => {
   const [data, setData] = useState(null);
@@ -9,17 +10,13 @@ const DataFetcher = ({ userId = 1 }) => {
     const fetchData = async () => {
       setLoading(true);
       setError(null);
-      
+
       try {
-        // Використовуємо JSONPlaceholder API для демонстрації
-        const response = await fetch(`https://jsonplaceholder.typicode.com/users/${userId}`);
-        
-        if (!response.ok) {
-          throw new Error(`Помилка HTTP: ${response.status}`);
-        }
-        
-        const result = await response.json();
-        setData(result);
+        // Використовуємо axios для запиту до JSONPlaceholder API
+        const response = await axios.get(`https://jsonplaceholder.typicode.com/users/${userId}`);
+
+        // axios автоматично парсить JSON і кладе дані в response.data
+        setData(response.data);
       } catch (err) {
         setError(err.message || 'Виникла помилка при завантаженні даних');
       } finally {
